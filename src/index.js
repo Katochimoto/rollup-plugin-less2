@@ -30,6 +30,7 @@ export default function RollupPluginLess2 ({
         return;
       }
 
+      options.filename = id;
       let resultCss = await less.render(code, options).then(function (output) {
         return output.css;
       });
