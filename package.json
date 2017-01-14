@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-less2",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A rollup plugin for less files, support css modules",
   "main": "rollup-plugin-less2.js",
   "scripts": {
@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
+    "babel-plugin-transform-async-to-generator": "^6.16.0",
     "babel-plugin-transform-es2015-block-scoping": "^6.21.0",
     "babel-plugin-transform-es2015-destructuring": "^6.19.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.18.0",

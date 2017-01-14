@@ -25,16 +25,13 @@ export default function RollupPluginLess2 ({
       return !output ? insertStyle.toString().replace(/insertStyle/, INSERT_STYLE) : '';
     },
 
-    transform (code, id) {
+    async transform (code, id) {
       if (!filter(id)) {
         return;
       }
 
-      let resultCss;
-      less.render(code, options, function (error, { css }) {
-        if (!error) {
-          resultCss = css;
-        }
+      let resultCss = await less.render(code, options).then(function (output) {
+        return output.css;
       });
 
       if (!resultCss) {
@@ -67,9 +64,9 @@ export default function RollupPluginLess2 ({
 
       if (output && typeof output === 'string') {
         if (firstTransform) {
-          fs.writeFileSync(output, resultCss);
+          await fs.writeFile(output, resultCss);
         } else {
-          fs.appendFileSync(output, resultCss);
+          await fs.appendFile(output, resultCss);
         }
       }
 

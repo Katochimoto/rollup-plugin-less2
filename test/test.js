@@ -10,7 +10,7 @@ describe('rollup-plugin-less2', function () {
       plugins: [
         RollupPluginLess2.default({
           cssModules: true,
-          output: false, // path.join(__dirname, 'samples', 'style.css')
+          output: path.join(__dirname, 'samples', 'style.css'),
           options: {
             plugins: [
               new LessPluginCssModules.default({
