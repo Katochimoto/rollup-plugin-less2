@@ -1,0 +1,49 @@
+{
+  "name": "rollup-plugin-less2",
+  "version": "0.0.1",
+  "description": "A rollup plugin for less files, support css modules",
+  "main": "rollup-plugin-less2.js",
+  "scripts": {
+    "test": "eslint . --color; mocha --compilers js:babel-register",
+    "build": "babel src/index.js -o rollup-plugin-less2.js",
+    "dev": "babel src/index.js -w -o rollup-plugin-less2.js",
+    "test-dev": "mocha -w --compilers js:babel-register"
+  },
+  "keywords": [
+    "rollup",
+    "plugin",
+    "less",
+    "rollup-plugin",
+    "css modules"
+  ],
+  "author": {
+    "name": "Rikishi",
+    "email": "rikishi@protonmail.ch",
+    "url": "https://github.com/Katochimoto"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "fs-extra": "^1.0.0",
+    "less": "^2.7.1",
+    "postcss": "^5.2.10",
+    "rollup-pluginutils": "^2.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Katochimoto/rollup-plugin-less2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-plugin-transform-do-expressions": "^6.8.0",
+    "babel-plugin-transform-es2015-block-scoping": "^6.21.0",
+    "babel-plugin-transform-es2015-destructuring": "^6.19.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.18.0",
+    "babel-plugin-transform-es2015-parameters": "^6.21.0",
+    "babel-plugin-transform-es2015-template-literals": "^6.8.0",
+    "babel-register": "^6.18.0",
+    "eslint": "^3.2.2",
+    "eslint-config-yandex": "^1.0.6",
+    "mocha": "^3.0.2",
+    "rollup": "^0.41.3"
+  }
+}
