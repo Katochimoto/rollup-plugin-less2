@@ -30,7 +30,7 @@ export default {
 };
 ```
 
-build]: https://travis-ci.org/Katochimoto/rollup-plugin-less2.svg?branch=master
+[build]: https://travis-ci.org/Katochimoto/rollup-plugin-less2.svg?branch=master
 [build-link]: https://travis-ci.org/Katochimoto/rollup-plugin-less2
 [version]: https://badge.fury.io/js/rollup-plugin-less2.svg
 [version-link]: http://badge.fury.io/js/rollup-plugin-less2
