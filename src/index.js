@@ -3,8 +3,16 @@ import postcss from 'postcss';
 import less from 'less';
 import { createFilter } from 'rollup-pluginutils';
 
-const INSERT_STYLE = '__$insertStyle';
+const INJECT_STYLE = '__$injectStyle';
 
+/**
+ * @param {string|string[]} [include=['**\/*.less', '**\/*.css']]
+ * @param {string|string[]} [exclude='node_modules/**']
+ * @param {boolean|string|function} [output=false]
+ * @param {boolean} [cssModules=false]
+ * @param {object} [options={}]
+ * @returns {{ name: string, intro: function, transform: function }}
+ */
 export default function RollupPluginLess2 ({
   include = [ '**/*.less', '**/*.css' ],
   exclude = 'node_modules/**',
@@ -13,7 +21,7 @@ export default function RollupPluginLess2 ({
   options = {}
 } = {}) {
 
-  let firstTransform = true;
+  let fileIndex = -1;
   let exportCss = {};
 
   const filter = createFilter(include, exclude);
@@ -21,23 +29,33 @@ export default function RollupPluginLess2 ({
   return {
     name: 'less2',
 
+    /**
+     * @returns {string}
+     */
     intro () {
-      return !output ? insertStyle.toString().replace(/insertStyle/, INSERT_STYLE) : '';
+      return !output ? injectStyle.toString().replace(/injectStyle/, INJECT_STYLE) : '';
     },
 
-    async transform (code, id) {
-      if (!filter(id)) {
+    /**
+     * @param {string} code
+     * @param {string} fileName
+     * @returns {{ code: string, map: Object }}
+     */
+    async transform (code, fileName) {
+      if (!filter(fileName)) {
         return;
       }
 
-      options.filename = id;
-      let resultCss = await less.render(code, options).then(function (output) {
-        return output.css;
+      options.filename = fileName;
+      let resultCss = await less.render(code, options).then(function (result) {
+        return result.css;
       });
 
       if (!resultCss) {
         return;
       }
+
+      fileIndex++;
 
       if (cssModules && resultCss.indexOf(':export') !== -1) {
         resultCss = resultCss.replace(/^\s*:export\s*{[^}]+}/m, function (exportValue) {
@@ -53,25 +71,25 @@ export default function RollupPluginLess2 ({
 
       if (cssModules) {
         if (!output) {
-          exportCode = `export default ${INSERT_STYLE}(${JSON.stringify(resultCss)}, ${JSON.stringify(exportCss)});`;
+          exportCode = `export default ${INJECT_STYLE}(${JSON.stringify(resultCss)}, ${JSON.stringify(exportCss)});`;
         } else {
           exportCode = `export default ${JSON.stringify(exportCss)};`;
         }
       } else {
         if (!output) {
-          exportCode = `export default ${INSERT_STYLE}(${JSON.stringify(resultCss)});`;
+          exportCode = `export default ${INJECT_STYLE}(${JSON.stringify(resultCss)});`;
         }
       }
 
-      if (output && typeof output === 'string') {
-        if (firstTransform) {
-          await fs.writeFile(output, resultCss);
-        } else {
-          await fs.appendFile(output, resultCss);
+      if (output) {
+        if (typeof output === 'string') {
+          await fileOutput(resultCss, output, fileIndex);
+
+        } else if (typeof output === 'function') {
+          await output(resultCss, fileName, fileIndex);
         }
       }
 
-      firstTransform = false;
       return {
         code: exportCode,
         map: { mappings: '' }
@@ -80,7 +98,12 @@ export default function RollupPluginLess2 ({
   };
 };
 
-function insertStyle (css, out) {
+/**
+ * @param {string} css
+ * @param {Object} [out]
+ * @returns {string}
+ */
+function injectStyle (css, out) {
   if (!css) {
     return;
   }
@@ -99,4 +122,19 @@ function insertStyle (css, out) {
 
   context.document.getElementsByTagName('head')[0].appendChild(style);
   return out || css;
+}
+
+/**
+ * @param {string} css
+ * @param {string} fileName
+ * @param {number} fileIndex
+ * @returns {Promise}
+ */
+function fileOutput (css, fileName, fileIndex) {
+  if (fileIndex === 0) {
+    return fs.writeFile(fileName, css);
+
+  } else {
+    return fs.appendFile(fileName, css);
+  }
 }

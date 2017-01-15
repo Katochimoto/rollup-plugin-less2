@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-less2",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A rollup plugin for less files, support css modules",
   "main": "rollup-plugin-less2.js",
   "scripts": {
@@ -42,6 +42,7 @@
     "babel-plugin-transform-es2015-shorthand-properties": "^6.18.0",
     "babel-plugin-transform-es2015-template-literals": "^6.8.0",
     "babel-register": "^6.18.0",
+    "chai": "^3.5.0",
     "eslint": "^3.2.2",
     "eslint-config-yandex": "^1.0.6",
     "less-plugin-css-modules": "0.0.2",
