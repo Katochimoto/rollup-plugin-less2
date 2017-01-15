@@ -22,7 +22,6 @@ export default function RollupPluginLess2 ({
 } = {}) {
 
   let fileIndex = -1;
-  let exportCss = {};
 
   const filter = createFilter(include, exclude);
 
@@ -57,7 +56,10 @@ export default function RollupPluginLess2 ({
 
       fileIndex++;
 
-      if (cssModules && resultCss.indexOf(':export') !== -1) {
+      const exportCss = {};
+      const exportModules = cssModules && resultCss.indexOf(':export') !== -1;
+
+      if (exportModules) {
         resultCss = resultCss.replace(/^\s*:export\s*{[^}]+}/m, function (exportValue) {
           postcss.parse(exportValue).first.each(function (decl) {
             exportCss[ decl.prop ] = decl.value;
@@ -69,7 +71,7 @@ export default function RollupPluginLess2 ({
 
       let exportCode = 'export default undefined;';
 
-      if (cssModules) {
+      if (exportModules) {
         if (!output) {
           exportCode = `export default ${INJECT_STYLE}(${JSON.stringify(resultCss)}, ${JSON.stringify(exportCss)});`;
         } else {
