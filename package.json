@@ -48,5 +48,12 @@
     "less-plugin-css-modules": "0.0.2",
     "mocha": "^3.0.2",
     "rollup": "^0.41.3"
+  },
+  "engines": {
+    "node": ">=4.0.0",
+    "npm": ">=3.0.0"
+  },
+  "directories": {
+    "test": "test"
   }
 }
