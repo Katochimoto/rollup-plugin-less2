@@ -1,4 +1,6 @@
 import fs from 'fs-extra';
+import mkdirp from 'mkdirp';
+import { dirname } from 'path';
 import postcss from 'postcss';
 import less from 'less';
 import { createFilter } from 'rollup-pluginutils';
@@ -134,6 +136,7 @@ function injectStyle (css, out) {
  */
 function fileOutput (css, fileName, fileIndex) {
   if (fileIndex === 0) {
+    mkdirp.sync(dirname(fileName));
     return fs.writeFile(fileName, css);
 
   } else {
