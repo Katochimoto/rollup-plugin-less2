@@ -37,8 +37,6 @@ var __$injectStyle = (function () {
   };
 }());
 
-var styles = __$injectStyle("2602354308");
+var styles$1 = __$injectStyle("2602354308");
 
-if (styles.app) {
-  console.log('!!!');
-}
+module.exports = styles$1;

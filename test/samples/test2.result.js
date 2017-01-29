@@ -3,8 +3,13 @@
 
 var __$injectStyle = (function () {
   var context = (function () { return this || (1, eval)('this'); })();
+  var exportObject = {
+  "2602354308": {
+    "app": "app__test"
+  }
+};
   var injectObject = {
-  "2602354308": ".app__test {\n  color: #000;\n}\n:export {\n  app: app__test;\n}\n"
+  "2602354308": ".app__test {\n  color: #000;\n}\n\n"
 };
   function injectStyle(cssText, context) {
   if (!cssText || context.window !== context) {
@@ -28,11 +33,10 @@ var __$injectStyle = (function () {
 }
   return function (hash) {
     injectStyle(injectObject[hash], context);
+    return exportObject[hash];
   };
 }());
 
-var styles = __$injectStyle("2602354308");
+Object.defineProperty(exports, '__esModule', { value: true });
 
-if (styles.app) {
-  console.log('!!!');
-}
+__$injectStyle("2602354308");
