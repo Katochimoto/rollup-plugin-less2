@@ -26,7 +26,7 @@ describe('rollup-plugin-less2', function () {
       ]
     }).then(bundle => {
       const result = bundle.generate({ sourceMap: false, format: 'cjs' });
-      const compare = fs.readFileSync(path.join(__dirname, 'samples', 'test1.result.js'), { encoding: 'utf8' });
+      const compare = fs.readFileSync(path.join(__dirname, 'samples', 'test1.result.js'), 'utf8');
       assert(result.code === compare);
     });
   });
@@ -51,8 +51,8 @@ describe('rollup-plugin-less2', function () {
       ]
     }).then(bundle => {
       const result = bundle.generate({ sourceMap: false, format: 'cjs' });
-      // fs.writeFileSync(path.join(__dirname, 'samples', 'test2.result.js'), result.code, { encoding: 'utf8' });
-      const compare = fs.readFileSync(path.join(__dirname, 'samples', 'test2.result.js'), { encoding: 'utf8' });
+      // fs.writeFileSync(path.join(__dirname, 'samples', 'test2.result.js'), result.code, 'utf8');
+      const compare = fs.readFileSync(path.join(__dirname, 'samples', 'test2.result.js'), 'utf8');
       assert(result.code === compare);
     });
   });
