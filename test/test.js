@@ -1,4 +1,4 @@
-import fs from 'fs-extra';
+import fs from 'fs';
 import path from 'path';
 import { rollup } from 'rollup';
 import { assert } from 'chai';

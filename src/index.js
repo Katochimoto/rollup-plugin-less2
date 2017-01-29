@@ -1,4 +1,4 @@
-import fs from 'fs-extra';
+import fs from 'fs';
 import mkdirp from 'mkdirp';
 import { dirname } from 'path';
 import stringHash from 'string-hash';
@@ -21,7 +21,10 @@ export default function RollupPluginLess2 ({
   exclude = 'node_modules/**',
   output = false,
   cssModules = false,
-  options = {}
+  options = {},
+  onWriteBefore = function (cssText) {
+    return cssText;
+  }
 } = {}) {
 
   const cache = new Map();
@@ -90,13 +93,15 @@ var ${INJECT_STYLE} = (function () {
     async onwrite () {
       if (output) {
         if (typeof output === 'string') {
-          let css = '';
+          let cssText = '';
           cache.forEach(function (value) {
-            css += value.code;
+            cssText += value.code;
           });
 
+          cssText = await onWriteBefore(cssText);
+
           mkdirp.sync(dirname(output));
-          await fs.writeFile(output, css);
+          await fs.writeFile(output, cssText);
 
         } else if (typeof output === 'function') {
           await output(cache);
