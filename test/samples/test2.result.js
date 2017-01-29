@@ -1,27 +1,37 @@
 'use strict';
 
-function __$injectStyle(css, out) {
-  if (!css) {
+
+var __$injectStyle = (function () {
+  var context = (function () { return this || (1, eval)('this'); })();
+  var injectObject = {
+  "2602354308": ".app__test {\n  color: #000;\n}\n:export {\n  app: app__test;\n}\n"
+};
+  function injectStyle(cssText, context) {
+  if (!cssText || context.window !== context) {
     return;
   }
 
-  var context = function () {
-    return this || (1, eval)('this');
-  }();
+  var doc = context.document;
+  var head = doc.head || doc.getElementsByTagName('head')[0];
+  var style = doc.createElement('style');
 
-  if (context.window !== context) {
-    return;
-  }
-
-  var style = context.document.createElement('style');
   style.setAttribute('media', 'screen');
-  style.innerHTML = css;
+  style.setAttribute('type', 'text/css');
 
-  context.document.getElementsByTagName('head')[0].appendChild(style);
-  return out || css;
+  if (style.styleSheet) {
+    style.styleSheet.cssText = cssText;
+  } else {
+    style.appendChild(doc.createTextNode(cssText));
+  }
+
+  head.appendChild(style);
 }
+  return function (hash) {
+    injectStyle(injectObject[hash], context);
+  };
+}());
 
-var styles = __$injectStyle(".app__test {\n  color: #000;\n}\n:export {\n  app: app__test;\n}\n");
+var styles = __$injectStyle("2602354308");
 
 if (styles.app) {
   console.log('!!!');
