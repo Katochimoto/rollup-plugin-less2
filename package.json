@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-less2",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "A rollup plugin for less files, support css modules",
   "main": "rollup-plugin-less2.js",
   "scripts": {
@@ -23,6 +23,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "concat-with-sourcemaps": "^1.0.4",
     "less": "^2.7.1",
     "mkdirp": "^0.5.1",
     "postcss": "^5.2.10",

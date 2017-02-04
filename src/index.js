@@ -1,9 +1,11 @@
 import fs from 'fs';
+import path from 'path';
 import mkdirp from 'mkdirp';
 import { dirname } from 'path';
 import stringHash from 'string-hash';
 import postcss from 'postcss';
 import less from 'less';
+import Concat from 'concat-with-sourcemaps';
 import { createFilter } from 'rollup-pluginutils';
 
 const INJECT_STYLE = '__$injectStyle';
@@ -17,13 +19,15 @@ const INJECT_STYLE = '__$injectStyle';
  * @returns {{ name: string, intro: function, transform: function, onwrite: function }}
  */
 export default function RollupPluginLess2 ({
+  rootpath = process.cwd(),
   include = [ '**/*.less', '**/*.css' ],
   exclude = 'node_modules/**',
   output = false,
   cssModules = false,
   options = {},
-  onWriteBefore = function (cssText) {
-    return cssText;
+  sourceMap = null,
+  onWriteBefore = function (css, map) {
+    return { css, map };
   }
 } = {}) {
 
@@ -93,15 +97,34 @@ var ${INJECT_STYLE} = (function () {
     async onwrite () {
       if (output) {
         if (typeof output === 'string') {
-          let cssText = '';
+          const concat = new Concat(Boolean(sourceMap), output, '\n');
+
           cache.forEach(function (value) {
-            cssText += value.code;
+            concat.add(value.filename, value.code, value.map);
           });
 
-          cssText = await onWriteBefore(cssText);
+          let { css, map } = await onWriteBefore(concat.content.toString('utf8'), concat.sourceMap);
 
           mkdirp.sync(dirname(output));
-          await fs.writeFile(output, cssText);
+
+          if (map) {
+            if (css.indexOf('sourceMappingURL') === -1) {
+              let sourceMappingURL = path.join(
+                sourceMap && sourceMap.sourceMapURL || '',
+                sourceMap && sourceMap.sourceMapBasepath || '',
+                path.basename(output) + '.map'
+              );
+
+              css += `\n/*# sourceMappingURL=${sourceMappingURL} */`;
+            }
+
+            await fs.writeFile(
+              sourceMap && sourceMap.sourceMapOutput || output + '.map',
+              JSON.stringify(map)
+            );
+          }
+
+          await fs.writeFile(output, css);
 
         } else if (typeof output === 'function') {
           await output(cache);
@@ -119,7 +142,14 @@ var ${INJECT_STYLE} = (function () {
         return;
       }
 
-      const data = await parseCss(code, Object.assign({ filename: fileName }, options), cssModules);
+      fileName = path.relative(rootpath, fileName);
+
+      const parseOptions = Object.assign({
+        filename: fileName,
+        sourceMap: sourceMap
+      }, options);
+
+      const data = await parseCss(code, parseOptions, cssModules);
 
       if (!data) {
         return;
@@ -169,7 +199,7 @@ function injectStyle (cssText, context) {
 
 /**
  * @param {string} code
- * @param {Object} options
+ * @param {{ filename: string, sourceMap: object }} options
  * @param {boolean} cssModules
  * @returns {Promise}
  */
@@ -188,8 +218,12 @@ function parseCss (code, options, cssModules) {
     }
 
     return {
+      filename: options.filename,
       code: output.css,
+      map: output.map,
       modules: modules
     };
+  }, function () {
+    return null;
   });
 }

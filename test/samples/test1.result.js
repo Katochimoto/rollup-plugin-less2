@@ -4,12 +4,12 @@
 var __$injectStyle = (function () {
   var context = (function () { return this || (1, eval)('this'); })();
   var exportObject = {
-  "2602354308": {
+  "3311399318": {
     "app": "app__test"
   }
 };
   var injectObject = {
-  "2602354308": ".app__test {\n  color: #000;\n}\n\n"
+  "3311399318": ".app__test {\n  color: #000;\n}\n\n"
 };
   function injectStyle(cssText, context) {
   if (!cssText || context.window !== context) {
@@ -37,6 +37,6 @@ var __$injectStyle = (function () {
   };
 }());
 
-var styles$1 = __$injectStyle("2602354308");
+var styles$1 = __$injectStyle("3311399318");
 
 module.exports = styles$1;
