@@ -14,8 +14,11 @@ const INJECT_STYLE = '__$injectStyle';
  * @param {string|string[]} [include=['**\/*.less', '**\/*.css']]
  * @param {string|string[]} [exclude='node_modules/**']
  * @param {boolean|string|function} [output=false]
+ * @param {string} [sourceMapOutput]
  * @param {boolean} [cssModules=false]
  * @param {Object} [options={}]
+ * @param {function} [onWriteBefore]
+ * @param {string} [rootpath=process.cwd()]
  * @returns {{ name: string, intro: function, transform: function, onwrite: function }}
  */
 export default function RollupPluginLess2 ({
@@ -23,9 +26,9 @@ export default function RollupPluginLess2 ({
   include = [ '**/*.less', '**/*.css' ],
   exclude = 'node_modules/**',
   output = false,
+  sourceMapOutput,
   cssModules = false,
   options = {},
-  sourceMap = null,
   onWriteBefore = function (css, map) {
     return { css, map };
   }
@@ -97,7 +100,7 @@ var ${INJECT_STYLE} = (function () {
     async onwrite () {
       if (output) {
         if (typeof output === 'string') {
-          const concat = new Concat(Boolean(sourceMap), output, '\n');
+          const concat = new Concat(Boolean(options.sourceMap), output, '\n');
 
           cache.forEach(function (value) {
             concat.add(value.filename, value.code, value.map);
@@ -109,19 +112,13 @@ var ${INJECT_STYLE} = (function () {
 
           if (map) {
             if (css.indexOf('sourceMappingURL') === -1) {
-              let sourceMappingURL = path.join(
-                sourceMap && sourceMap.sourceMapURL || '',
-                sourceMap && sourceMap.sourceMapBasepath || '',
-                path.basename(output) + '.map'
-              );
-
+              const sourceMapURL = options.sourceMap && options.sourceMap.sourceMapURL || '';
+              const sourceMapBasepath = options.sourceMap && options.sourceMap.sourceMapBasepath || '';
+              const sourceMappingURL = path.join(sourceMapURL, sourceMapBasepath, path.basename(output) + '.map');
               css += `\n/*# sourceMappingURL=${sourceMappingURL} */`;
             }
 
-            await fs.writeFile(
-              sourceMap && sourceMap.sourceMapOutput || output + '.map',
-              JSON.stringify(map)
-            );
+            await fs.writeFile(sourceMapOutput || output + '.map', JSON.stringify(map));
           }
 
           await fs.writeFile(output, css);
@@ -144,11 +141,7 @@ var ${INJECT_STYLE} = (function () {
 
       fileName = path.relative(rootpath, fileName);
 
-      const parseOptions = Object.assign({
-        filename: fileName,
-        sourceMap: sourceMap
-      }, options);
-
+      const parseOptions = Object.assign({ filename: fileName }, options);
       const data = await parseCss(code, parseOptions, cssModules);
 
       if (!data) {
@@ -199,7 +192,7 @@ function injectStyle (cssText, context) {
 
 /**
  * @param {string} code
- * @param {{ filename: string, sourceMap: object }} options
+ * @param {Object} options
  * @param {boolean} cssModules
  * @returns {Promise}
  */

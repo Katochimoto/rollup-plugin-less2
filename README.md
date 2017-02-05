@@ -30,6 +30,18 @@ export default {
 };
 ```
 
+## Options
+
+- *{string}* rootpath=process.cwd()
+- *{string|string[]}* include=['\*\*/\*.less', '\*\*/\*.css']
+- *{string|string[]}* exclude='node_modules/\*\*'
+- *{boolean|string|function}* output=false
+- *{string}* sourceMapOutput
+- *{boolean}* cssModules=false
+- *{object}* options={}
+- *{function}* onWriteBefore
+
+
 [build]: https://travis-ci.org/Katochimoto/rollup-plugin-less2.svg?branch=master
 [build-link]: https://travis-ci.org/Katochimoto/rollup-plugin-less2
 [version]: https://badge.fury.io/js/rollup-plugin-less2.svg

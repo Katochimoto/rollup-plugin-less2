@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-less2",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A rollup plugin for less files, support css modules",
   "main": "rollup-plugin-less2.js",
   "scripts": {
