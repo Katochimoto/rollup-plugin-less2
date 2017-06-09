@@ -97,7 +97,7 @@ var ${INJECT_STYLE} = (function () {
       return '';
     },
 
-    async onwrite () {
+    async ongenerate () {
       if (output) {
         if (typeof output === 'string') {
           const concat = new Concat(Boolean(options.sourceMap), output, '\n');
