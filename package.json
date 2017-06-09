@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-less2",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "A rollup plugin for less files, support css modules",
   "main": "rollup-plugin-less2.js",
   "scripts": {
@@ -26,30 +26,30 @@
     "concat-with-sourcemaps": "^1.0.4",
     "less": "^2.7.1",
     "mkdirp": "^0.5.1",
-    "postcss": "^5.2.10",
+    "postcss": "^6.0.1",
     "rollup-pluginutils": "^2.0.1",
-    "string-hash": "^1.1.1"
+    "string-hash": "^1.1.3"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/Katochimoto/rollup-plugin-less2"
   },
   "devDependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-plugin-transform-async-to-generator": "^6.16.0",
-    "babel-plugin-transform-es2015-block-scoping": "^6.21.0",
-    "babel-plugin-transform-es2015-destructuring": "^6.19.0",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.18.0",
-    "babel-plugin-transform-es2015-parameters": "^6.21.0",
-    "babel-plugin-transform-es2015-shorthand-properties": "^6.18.0",
-    "babel-plugin-transform-es2015-template-literals": "^6.8.0",
-    "babel-register": "^6.18.0",
-    "chai": "^3.5.0",
-    "eslint": "^3.2.2",
+    "babel-cli": "^6.24.1",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-plugin-transform-es2015-block-scoping": "^6.24.1",
+    "babel-plugin-transform-es2015-destructuring": "^6.23.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
+    "babel-plugin-transform-es2015-parameters": "^6.24.1",
+    "babel-plugin-transform-es2015-shorthand-properties": "^6.24.1",
+    "babel-plugin-transform-es2015-template-literals": "^6.22.0",
+    "babel-register": "^6.24.1",
+    "chai": "^4.0.2",
+    "eslint": "^3.19.0",
     "eslint-config-yandex": "^1.0.6",
-    "less-plugin-css-modules": "0.0.2",
-    "mocha": "^3.0.2",
-    "rollup": "^0.41.3"
+    "less-plugin-css-modules": "0.0.3",
+    "mocha": "^3.4.2",
+    "rollup": "^0.42.0"
   },
   "engines": {
     "node": ">=4.0.0",
