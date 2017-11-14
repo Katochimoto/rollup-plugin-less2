@@ -118,10 +118,10 @@ var ${INJECT_STYLE} = (function () {
               css += `\n/*# sourceMappingURL=${sourceMappingURL} */`;
             }
 
-            await fs.writeFile(sourceMapOutput || output + '.map', JSON.stringify(map));
+            await fs.writeFile(sourceMapOutput || output + '.map', JSON.stringify(map), () => {});
           }
 
-          await fs.writeFile(output, css);
+          await fs.writeFile(output, css, () => {});
 
         } else if (typeof output === 'function') {
           await output(cache);
@@ -136,7 +136,7 @@ var ${INJECT_STYLE} = (function () {
      */
     async transform (code, fileName) {
       if (!filter(fileName)) {
-        return;
+        return await undefined;
       }
 
       fileName = path.relative(rootpath, fileName);
@@ -145,7 +145,7 @@ var ${INJECT_STYLE} = (function () {
       const data = await parseCss(code, parseOptions, cssModules);
 
       if (!data) {
-        return;
+        return await undefined;
       }
 
       const fileNameHash = String(stringHash(fileName));
@@ -156,7 +156,7 @@ var ${INJECT_STYLE} = (function () {
         `export default ${INJECT_STYLE}(${JSON.stringify(fileNameHash)});` :
         'export default undefined;';
 
-      return {
+      return await {
         code: exportCode,
         map: { mappings: '' }
       };
